@@ -26,7 +26,7 @@ class TC_ExistingWindow < Test::Unit::TestCase
     assert_raises(NoMatchingWindowFoundException) { Browser.attach(:url, "missing") }
     assert_raises(NoMatchingWindowFoundException) { Browser.attach(:url, /missing/) }
   end    
-  
+
   # Open a few browsers so that the test has a few windows to choose
   # from. The test harness has already opened a window that we won't
   # use.
@@ -41,7 +41,7 @@ class TC_ExistingWindow < Test::Unit::TestCase
       
     b1 = Browser.attach(:title , /buttons/i)
     assert_equal("Test page for buttons", b1.title)
-  
+
     b2 = Browser.attach(:title , "Test page for buttons")
     assert_equal("Test page for buttons", b2.title)
     
@@ -57,7 +57,7 @@ class TC_ExistingWindow < Test::Unit::TestCase
     assert_equal 'Pass Page', browser.title
     assert_match /pass.html/, browser.url
   end
-  
+
   tag_method :test_working_back_and_forth, :fails_on_firefox
   def test_working_back_and_forth
     open_several_windows
