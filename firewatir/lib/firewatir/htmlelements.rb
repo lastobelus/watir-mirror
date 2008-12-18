@@ -314,18 +314,18 @@ module FireWatir
       return table_rows
     end
     
-    def bodies      
+    def bodies
       assert_exists
 
       jssh_names = get_collection_jssh_names('tBodies')
 
-      table_bodies = []      
+      table_bodies = []
       jssh_names.each do |jssh_name|
         table_bodies << TableBody.new(@container, :jssh_name, jssh_name, self)
-      end      
+      end
       table_bodies
     end
-    
+
     #
     # Description:
     #   Get row at particular index in table.
@@ -442,15 +442,15 @@ module FireWatir
 
       jssh_names = get_collection_jssh_names('rows')
 
-      body_rows = []    
+      body_rows = []
       jssh_names.each do |jssh_name|
         body_rows << TableRow.new(@container, :jssh_name, jssh_name)
-      end  
+      end
       body_rows
     end
 
     def each
-      rows.each { |row| yield row } 
+      rows.each { |row| yield row }
     end
 
     # returns the number of rows in this table body.
@@ -458,7 +458,7 @@ module FireWatir
       return rows.length
     end
 
-  end  
+  end
   
   #
   # Description:
