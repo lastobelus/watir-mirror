@@ -314,6 +314,18 @@ module FireWatir
       return table_rows
     end
     
+    def bodies      
+      assert_exists
+
+      jssh_names = get_collection_jssh_names('tBodies')
+
+      table_bodies = []      
+      jssh_names.each do |jssh_name|
+        table_bodies << TableBody.new(@container, :jssh_name, jssh_name, self)
+      end      
+      table_bodies
+    end
+    
     #
     # Description:
     #   Get row at particular index in table.
@@ -400,97 +412,53 @@ module FireWatir
   # this class is a collection of the table body objects that exist in the table
   # it wouldnt normally be created by a user, but gets returned by the bodies method of the Table object
   # many of the methods available to this object are inherited from the Element class
-  # TODO: Implement TableBodies class.
-  #class TableBodies < Element 
-  #
-  # Description:
-  #   Initializes the form element.
-  #
-  # Input:
-  #   - how - Attribute to identify the form element.
-  #   - what - Value of that attribute.
-  #
-  #def initialize( parent_table)
-  #    element = container
-  #    @o = parent_table     # in this case, @o is the parent table
-  #end
-  
-  # returns the number of TableBodies that exist in the table
-  #def length
-  #    assert_exists
-  #    return @o.tBodies.length
-  #end
-  
-  # returns the n'th Body as a FireWatir TableBody object
-  #def []n
-  #    assert_exists
-  #    return TableBody.new(element, :direct, ole_table_body_at_index(n))
-  #end
-  
-  # returns an ole table body
-  #def ole_table_body_at_index(n)
-  #    return @o.tBodies[(n-1).to_s]
-  #end
-  
-  # iterates through each of the TableBodies in the Table. Yields a TableBody object
-  #def each
-  #    1.upto( @o.tBodies.length ) { |i| yield TableBody.new(element, :direct, ole_table_body_at_index(i)) }
-  #end
-  
-  #end
-  
-  # this class is a table body
-  # TODO: Implement TableBody class
-  #class TableBody < Element
-  #def locate
-  #    @o = nil
-  #    if @how == :direct
-  #        @o = @what     # in this case, @o is the table body
-  #    elsif @how == :index
-  #        @o = @parent_table.bodies.ole_table_body_at_index(@what)
-  #    end
-  #    @rows = []
-  #    if @o
-  #        @o.rows.each do |oo|
-  #            @rows << TableRow.new(element, :direct, oo)
-  #        end
-  #    end
-  #end            
-  
-  #
-  # Description:
-  #   Initializes the form element.
-  #
-  # Input:
-  #   - how - Attribute to identify the form element.
-  #   - what - Value of that attribute.
-  #
-  #def initialize( how, what, parent_table = nil)
-  #    element = container
-  #    @how = how
-  #    @what = what
-  #    @parent_table = parent_table
-  #    super nil
-  #end
-  
-  # returns the specified row as a TableRow object
-  #def [](n)
-  #    assert_exists
-  #    return @rows[n - 1]
-  #end
-  
-  # iterates through all the rows in the table body
-  #def each
-  #    locate
-  #    0.upto(@rows.length - 1) { |i| yield @rows[i] }
-  #end
-  
-  # returns the number of rows in this table body.
-  #def length
-  #    return @rows.length
-  #end
-  #end
-  
+  class TableBody < Element
+    def locate
+      @o = nil
+      if @how == :jssh_name
+          @element_name = @what
+      elsif @how == :xpath
+          @element_name = element_by_xpath(@container, @what)
+      else
+          @element_name = locate_tagged_element("TBODY", @how, @what)
+      end
+      @o = self
+    end
+
+    def initialize(container, how, what, parent_table = nil)
+      @container = container
+      @how = how
+      @what = what
+      @parent_table = parent_table
+      super nil
+    end
+
+    def []n
+      rows[n - 1]
+    end
+
+    def rows
+      assert_exists
+
+      jssh_names = get_collection_jssh_names('rows')
+
+      body_rows = []    
+      jssh_names.each do |jssh_name|
+        body_rows << TableRow.new(@container, :jssh_name, jssh_name)
+      end  
+      body_rows
+    end
+
+    def each
+      rows.each { |row| yield row } 
+    end
+
+    # returns the number of rows in this table body.
+    def length
+      return rows.length
+    end
+
+  end  
   
   #
   # Description:

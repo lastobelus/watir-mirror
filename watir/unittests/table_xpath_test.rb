@@ -79,7 +79,7 @@ class TC_Tables_XPath < Test::Unit::TestCase
       
       case count 
       when 1 
-        compare_text = "This text is in the FRST TBODY."
+        compare_text = "This text is in the FIRST TBODY."
       when 2 
         compare_text = "This text is in the SECOND TBODY."
       when 3 
