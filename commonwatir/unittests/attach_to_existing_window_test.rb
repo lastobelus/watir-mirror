@@ -19,6 +19,15 @@ class TC_ExistingWindow < Test::Unit::TestCase
     @browsers.each {|x| x.close}
   end
 
+  def test_title_and_url_are_correct_after_reload
+    uses_page "whitespace.html"
+    assert_equal 'Test page for whitespace', browser.title
+    assert_match /whitespace.html/, browser.url
+    browser.link(:text, 'Login').click
+    assert_equal 'Pass Page', browser.title
+    assert_match /pass.html/, browser.url
+  end
+
   def test_missing_window
     Browser.set_options :attach_timeout => 0.1
     assert_raises(NoMatchingWindowFoundException) { Browser.attach(:title, "missing") }
@@ -26,6 +35,9 @@ class TC_ExistingWindow < Test::Unit::TestCase
     assert_raises(NoMatchingWindowFoundException) { Browser.attach(:url, "missing") }
     assert_raises(NoMatchingWindowFoundException) { Browser.attach(:url, /missing/) }
   end    
+
+
+if ! (RUBY_PLATFORM =~ /darwin/i)
 
   # Open a few browsers so that the test has a few windows to choose
   # from. The test harness has already opened a window that we won't
@@ -49,15 +61,6 @@ class TC_ExistingWindow < Test::Unit::TestCase
     assert_equal("Test page for buttons", b3.title)
   end
   
-  def test_title_and_url_are_correct_after_reload
-    uses_page "whitespace.html"
-    assert_equal 'Test page for whitespace', browser.title
-    assert_match /whitespace.html/, browser.url
-    browser.link(:text, 'Login').click
-    assert_equal 'Pass Page', browser.title
-    assert_match /pass.html/, browser.url
-  end
-
   tag_method :test_working_back_and_forth, :fails_on_firefox
   def test_working_back_and_forth
     open_several_windows
@@ -67,5 +70,6 @@ class TC_ExistingWindow < Test::Unit::TestCase
     whitespace.link(:text, 'Login').click
     assert_match /pass/i, whitespace.text
   end
+end
 end
 

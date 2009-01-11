@@ -144,7 +144,15 @@ module FireWatir
         when /java/
           raise "Not implemented: Create a browser finder in JRuby"
         end     
-        @t = Thread.new { system("#{path_to_bin} -jssh #{profile_opt}") } 
+
+        case RUBY_PLATFORM 
+        when /mswin/, /linux/i
+          @t = Thread.new { system("#{path_to_bin} -jssh #{profile_opt}") } 
+        when /darwin/i
+          exec "#{path_to_bin} -jssh #{profile_opt}" if (@pid=fork)==nil
+          Process.detach(@pid)
+        end     
+
         sleep waitTime
       end
 
@@ -258,7 +266,12 @@ module FireWatir
       # Try to join thread only if there is exactly one open window
       if js_eval("getWindows().length").to_i == 1
         js_eval("getWindows()[0].close()")
-        @t.join if @t != nil # why? consider removing this. it may be causing hangs.
+        case RUBY_PLATFORM 
+        when /mswin/, /linux/i
+          @t.join if @t != nil # why? consider removing this. it may be causing hangs.
+        when /darwin/i
+          Process.kill(9, @pid)
+        end     
       else
         # Check if window exists, because there may be the case that it has been closed by click event on some element.
         # For e.g: Close Button, Close this Window link etc.
