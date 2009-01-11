@@ -140,7 +140,7 @@ module FireWatir
         when /linux/i
           path_to_bin = `which firefox`.strip
         when /darwin/i
-          path_to_bin = '/Applications/Firefox.app/Contents/MacOS/firefox'
+          path_to_bin = '/Applications/Firefox.app/Contents/MacOS/firefox-bin'
         when /java/
           raise "Not implemented: Create a browser finder in JRuby"
         end     
