@@ -430,7 +430,6 @@ module FireWatir
       @how = how
       @what = what
       @parent_table = parent_table
-      super nil
     end
 
     def []n
