@@ -193,7 +193,6 @@ module FireWatir
       @what = what
       @container = container
       @o = nil
-      #super nil
     end
     
     #
@@ -430,7 +429,6 @@ module FireWatir
       @how = how
       @what = what
       @parent_table = parent_table
-      super nil
     end
 
     def []n
@@ -495,7 +493,6 @@ module FireWatir
       @how = how   
       @what = what   
       @container = container
-      #super nil
     end
     
     #
@@ -590,7 +587,6 @@ module FireWatir
       @how = how   
       @what = what   
       @container = container
-      #super nil   
     end 
     
     alias to_s text

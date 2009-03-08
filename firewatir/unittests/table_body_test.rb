@@ -77,6 +77,16 @@ class TC_TableBody < Test::Unit::TestCase
   end
 
 
+  def test_set_input_works_in_body
+    table = browser.table(:id, "table_with_nested_elements")
+    assert table.bodies[0].rows[0].text_field(:id, 'text_id').exists?
+    assert table.bodies[0].rows[0].text_field(:id, 'text_id').verify_contains('OldValue')
+    assert_nothing_raised do
+      table.bodies[0].rows[0].text_field(:id, 'text_id').set('NewValue')
+    end
+    assert table.bodies[0].rows[0].text_field(:id, 'text_id').verify_contains('NewValue')
+  end
+  
   # Dirty mocks implementation
   FireWatir::TableRow.class_eval do
     @@counter = 0
