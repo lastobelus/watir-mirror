@@ -984,6 +984,21 @@ module FireWatir
     
     alias getAllContents options
     
+    # Does the SelectList include the specified option (text)?
+    def include? text_or_regexp
+      options.grep(text_or_regexp).size > 0
+    end
+    alias includes? include?
+    
+    # Is the specified option (text) selected? Raises exception of option does not exist.
+    def selected? text_or_regexp
+      unless includes? text_or_regexp
+        raise UnknownObjectException, "Option #{text_or_regexp.inspect} not found."
+      end
+
+      selected_options.grep(text_or_regexp).size > 0
+    end
+
     #
     # Description:
     #   Gets all the selected items in the select list as an array. 
